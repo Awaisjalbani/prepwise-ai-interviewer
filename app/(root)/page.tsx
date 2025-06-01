@@ -1,10 +1,10 @@
 import InterviewCard from "@/components/InterviewCard";
 import { Button } from "@/components/ui/button";
+import { getCurrentUser } from "@/lib/action/auth.action";
 import {
-  getCurrentUser,
   getInterviewsByUserId,
   getLatestInterviews,
-} from "@/lib/action/auth.action";
+} from "@/lib/action/general.action";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -59,7 +59,7 @@ const page = async () => {
       <section className="flex flex-col gap-6 mt-8">
         <h2>Take an Interview</h2>
 
-        <div className="sinterviews-section">
+        <div className="interviews-section">
           {hasUpcomingInterviews ? (
             latestInterviews?.map((interview) => (
               <InterviewCard {...interview} key={interview.id} />
