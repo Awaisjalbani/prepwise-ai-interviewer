@@ -1,19 +1,28 @@
-import Agent from "@/components/Agent";
-import DisplayTechIcons from "@/components/DisplayTechIcons";
-import { getCurrentUser } from "@/lib/action/auth.action";
-import { getInterviewById } from "@/lib/action/general.action";
-import { getRandomInterviewCover } from "@/lib/utils";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { userAgent } from "next/server";
-import React from "react";
 
-const page = async ({ params }: RouteParams) => {
+import Agent from "@/components/Agent";
+import { getRandomInterviewCover } from "@/lib/utils";
+
+import {
+  getFeedbackByInterviewId,
+  getInterviewById,
+} from "@/lib/actions/general.action";
+import { getCurrentUser } from "@/lib/actions/auth.action";
+import DisplayTechIcons from "@/components/DisplayTechIcons";
+
+const InterviewDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
-  const user = await getCurrentUser();
-  const interview = await getInterviewById(id);
 
+  const user = await getCurrentUser();
+
+  const interview = await getInterviewById(id);
   if (!interview) redirect("/");
+
+  const feedback = await getFeedbackByInterviewId({
+    interviewId: id,
+    userId: user?.id!,
+  });
 
   return (
     <>
@@ -27,26 +36,27 @@ const page = async ({ params }: RouteParams) => {
               height={40}
               className="rounded-full object-cover size-[40px]"
             />
-            <h3 className="capitalize">{interview.role}</h3>
+            <h3 className="capitalize">{interview.role} Interview</h3>
           </div>
 
           <DisplayTechIcons techStack={interview.techstack} />
         </div>
 
-        <p className="bg-dark-200 px-4 py-2 rounded-lg h-fit capitalize">
+        <p className="bg-dark-200 px-4 py-2 rounded-lg h-fit">
           {interview.type}
         </p>
       </div>
 
       <Agent
-        userName={user?.name}
-        type={user?.id}
+        userName={user?.name!}
+        userId={user?.id}
         interviewId={id}
         type="interview"
         questions={interview.questions}
+        feedbackId={feedback?.id}
       />
     </>
   );
 };
 
-export default page;
+export default InterviewDetails;

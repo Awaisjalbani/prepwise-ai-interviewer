@@ -1,16 +1,17 @@
+import { Toaster } from "sonner";
 import type { Metadata } from "next";
 import { Mona_Sans } from "next/font/google";
+
 import "./globals.css";
-import { Toaster } from "sonner";
 
 const monaSans = Mona_Sans({
-  variable: "--font-geist-sans",
+  variable: "--font-mona-sans",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   title: "PrepWise",
-  description: "An AI Powered Mock Interview Platfrom",
+  description: "An AI-powered platform for preparing for mock interviews",
 };
 
 export default function RootLayout({
